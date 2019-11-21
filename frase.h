@@ -20,3 +20,5 @@ void toUpper(char *f);
 void leFrase(Frase *f);
 
 void terminaFrase(Frase *f);
+
+Letra retornaProx(Frase *f);

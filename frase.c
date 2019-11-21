@@ -25,7 +25,7 @@ void toUpper(char *f){
 
 void leFrase (Frase *f){
     char texto[f->tamanho];
-		scanf("%s", texto);
+		// ver scanf
 		toUpper(texto);
 
 		for (int i=0; i < strlen(texto); ++i){
@@ -37,8 +37,6 @@ void leFrase (Frase *f){
 				insereFim(texto[i], 1, &f->letras);
 			}
 		}
-		// imprimeLista(f->letras); //debug
+		imprimeLista(f->letras); //debug
 }
-
-
 
