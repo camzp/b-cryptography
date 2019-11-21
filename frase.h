@@ -6,6 +6,7 @@
 typedef struct frase {
    Lista letras;
    int posicao;
+   int tamanho;
 } Frase;
 
 Frase iniciaFrase (int tamanho);
