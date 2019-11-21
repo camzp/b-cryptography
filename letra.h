@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdlib.h>
 
 typedef struct letra {
   char letra;
-  int classificacao;
+  int classificacao; //0: VOGAL, 1: CONSOANTE
   struct letra *prox;
 } Letra;
 
@@ -19,9 +20,7 @@ void imprimeLista (Lista l);
 
 char retornaLetra (Lista l);
 
-Letra mostraLetra (Lista l);
-
-void removeLetra(Lista *l);
+int retornaTipo(Lista l);
 
 Lista prox (Lista l);
 

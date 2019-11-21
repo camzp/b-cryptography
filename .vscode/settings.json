@@ -2,6 +2,7 @@
   "files.associations": {
     "stdio.h": "c",
     "letras.h": "c",
-    "frase.h": "c"
+    "frase.h": "c",
+    "typeinfo": "c"
   }
 }

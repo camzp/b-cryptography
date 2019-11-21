@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "letras.h"
+#include <ctype.h>
+#include "string.h"
+#include "letra.h"
 
 
 typedef struct frase {
@@ -9,10 +11,12 @@ typedef struct frase {
    int tamanho;
 } Frase;
 
-Frase iniciaFrase (int tamanho);
+Frase iniciaFrase(int tamanho);
 
-void leFrase (Frase *f);
+void editaTamanhoFrase(int tamanho);
 
-void proximaLetra (Frase *f);
+void toUpper(char *f);
 
-void terminaFrase (Frase *f);
+void leFrase(Frase *f);
+
+void terminaFrase(Frase *f);

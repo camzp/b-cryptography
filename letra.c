@@ -27,19 +27,23 @@ void insereFim(char l, int c, Lista *li) {
 	//Enquanto o auxiliar, não achar vazio, ele vai para o próximo
 	while (aux->prox != NULL) aux = aux->prox;
 		//Inserindo no fim.
-		aux->prox = li;
+		aux->prox = le;
 }
 
 void imprimeLista (Lista l){
   Lista aux = l;
   while (aux != NULL){
-    printf("%c", aux->letra);
+    printf("%c\n", aux->letra);
     aux = aux -> prox;
   }  
 }
 
 char retornaLetra (Lista l) {
   return l->letra;
+}
+
+int retornaTipo(Lista l){
+	return l->classificacao;
 }
 
 Lista prox (Lista l){
