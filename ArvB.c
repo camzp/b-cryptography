@@ -9,7 +9,8 @@ TAB *Cria(int t)
 {
   TAB *novo = (TAB *)malloc(sizeof(TAB));
   novo->nchaves = 0;
-  novo->chave = (char *)malloc(sizeof(char) * ((t * 2) - 1));
+  novo->l = (Letras *)malloc(sizeof(Letras) * ((t * 2) - 1));
+  novo->l->classificacao = 0;
   novo->folha = 1;
   novo->nivel = 0;
   novo->filho = (TAB **)malloc(sizeof(TAB *) * (t * 2));
@@ -30,7 +31,7 @@ TAB *Libera(TAB *a)
       for (i = 0; i < a->nchaves; i++)
         Libera(a->filho[i]);
     }
-    free(a->chave);
+    free(a->l);
     free(a->filho);
     free(a);
     return NULL;
@@ -48,22 +49,23 @@ void Imprime(TAB *a, int andar)
       Imprime(a->filho[i], andar + 1);
       for (j = 0; j <= andar; j++)
         printf("   ");
-      printf("%d\n", a->chave[i]);
+      //printf("%d\n", a->chave[i]);
+      printf("%d\n", a->l[i].letra);
     }
     Imprime(a->filho[i], andar + 1);
   }
 }
 
-TAB *Busca(TAB *x, int ch)
+TAB *Busca(TAB *x, char ch)
 {
   TAB *resp = NULL;
   if (!x)
     return resp;
 
   int i = 0;
-  while ((i < x->nchaves) && (ch > x->chave[i]))
+  while ((i < x->nchaves) && (ch != x->l[i].letra))
     i++;
-  if ((i < x->nchaves) && (ch == x->chave[i]))
+  if ((i < x->nchaves) && (ch == x->l[i].letra))
     return x;
   if (x->folha == 1)
     return resp;
@@ -82,7 +84,7 @@ TAB *Divisao(TAB *x, int i, TAB *y, int t)
   z->folha = y->folha;
   int j;
   for (j = 0; j < t - 1; j++)
-    z->chave[j] = y->chave[j + t];
+    z->l[j] = y->l[j + t];
   if (!y->folha)
   {
     for (j = 0; j < t; j++)
@@ -96,33 +98,33 @@ TAB *Divisao(TAB *x, int i, TAB *y, int t)
     x->filho[j + 1] = x->filho[j];
   x->filho[i] = z;
   for (j = x->nchaves; j >= i; j--)
-    x->chave[j] = x->chave[j - 1];
-  x->chave[i - 1] = y->chave[t - 1];
+    x->l[j] = x->l[j - 1];
+  x->l[i - 1] = y->l[t - 1];
   x->nchaves++;
   return x;
 }
 
-TAB *Insere_Nao_Completo(TAB *x, int k, int t)
+TAB *Insere_Nao_Completo(TAB *x, char k, int t)
 {
   int i = x->nchaves - 1;
   if (x->folha)
   {
-    while ((i >= 0) && (k < x->chave[i]))
+    while ((i >= 0) && (k != x->l[i].letra))
     {
-      x->chave[i + 1] = x->chave[i];
+      x->l[i + 1] = x->l[i];
       i--;
     }
-    x->chave[i + 1] = k;
+    x->l[i + 1].letra = k;
     x->nchaves++;
     return x;
   }
-  while ((i >= 0) && (k < x->chave[i]))
+  while ((i >= 0) && (k != x->l[i].letra))
     i--;
   i++;
   if (x->filho[i]->nchaves == ((2 * t) - 1))
   {
     x = Divisao(x, (i + 1), x->filho[i], t);
-    if (k > x->chave[i])
+    if (k != x->l[i].letra)
       i++;
   }
   x->filho[i] = Insere_Nao_Completo(x->filho[i], k, t);
@@ -130,14 +132,14 @@ TAB *Insere_Nao_Completo(TAB *x, int k, int t)
 }
 
 //Inserção de Letras
-TAB *Insere(TAB *T, int k, int t)
+TAB *Insere(TAB *T, char k, int t)
 {
   if (Busca(T, k))
     return T;
   if (!T)
   {
     T = Cria(t);
-    T->chave[0] = k;
+    T->l[0].letra = k;
     T->nchaves = 1;
     return T;
   }
@@ -155,21 +157,21 @@ TAB *Insere(TAB *T, int k, int t)
   return T;
 }
 
-TAB *remover(TAB *arv, int ch, int t)
+TAB *remover(TAB *arv, char ch, int t)
 {
   if (!arv)
     return arv;
   int i;
 
-  for (i = 0; i < arv->nchaves && arv->chave[i] < ch; i++)
+  for (i = 0; i < arv->nchaves && arv->l[i].letra != ch; i++)
     ;
-  if (i < arv->nchaves && ch == arv->chave[i])
+  if (i < arv->nchaves && ch == arv->l[i].letra)
   { //CASOS 1, 2A, 2B e 2C
     if (arv->folha)
     { //CASO 1
       int j;
       for (j = i; j < arv->nchaves - 1; j++)
-        arv->chave[j] = arv->chave[j + 1];
+        arv->l[j] = arv->l[j + 1];
       arv->nchaves--;
       return arv;
     }
@@ -178,9 +180,9 @@ TAB *remover(TAB *arv, int ch, int t)
       TAB *y = arv->filho[i];
       while (!y->folha)
         y = y->filho[y->nchaves];
-      int temp = y->chave[y->nchaves - 1];
+      int temp = y->l[y->nchaves - 1].letra;
       arv->filho[i] = remover(arv->filho[i], temp, t);
-      arv->chave[i] = temp;
+      arv->l[i].letra = temp;
       return arv;
     }
     if (!arv->folha && arv->filho[i + 1]->nchaves >= t)
@@ -188,27 +190,27 @@ TAB *remover(TAB *arv, int ch, int t)
       TAB *y = arv->filho[i + 1];
       while (!y->folha)
         y = y->filho[0];
-      int temp = y->chave[0];
+      int temp = y->l[0].letra;
       y = remover(arv->filho[i + 1], temp, t);
-      arv->chave[i] = temp;
+      arv->l[i].letra = temp;
       return arv;
     }
     if (!arv->folha && arv->filho[i + 1]->nchaves == t - 1 && arv->filho[i]->nchaves == t - 1)
     { //CASO 2C
       TAB *y = arv->filho[i];
       TAB *z = arv->filho[i + 1];
-      y->chave[y->nchaves] = ch;
+      y->l[y->nchaves].letra = ch;
       int j;
       for (j = 0; j < t - 1; j++)
-        y->chave[t + j] = z->chave[j];
+        y->l[t + j] = z->l[j];
       for (j = 0; j <= t; j++)
         y->filho[t + j] = z->filho[j];
       y->nchaves = 2 * t - 1;
       for (j = i; j < arv->nchaves - 1; j++)
-        arv->chave[j] = arv->chave[j + 1];
+        arv->l[j] = arv->l[j + 1];
       for (j = i + 1; j <= arv->nchaves; j++)
         arv->filho[j] = arv->filho[j + 1];
-      arv->filho[j] = NULL; //Campello
+      arv->filho[j] = NULL;
       arv->nchaves--;
       arv->filho[i] = remover(arv->filho[i], ch, t);
       return arv;
@@ -221,12 +223,12 @@ TAB *remover(TAB *arv, int ch, int t)
     if ((i < arv->nchaves) && (arv->filho[i + 1]->nchaves >= t))
     { //CASO 3A
       z = arv->filho[i + 1];
-      y->chave[t - 1] = arv->chave[i];
+      y->l[t - 1] = arv->l[i];
       y->nchaves++;
-      arv->chave[i] = z->chave[0];
+      arv->l[i] = z->l[0];
       int j;
       for (j = 0; j < z->nchaves - 1; j++)
-        z->chave[j] = z->chave[j + 1];
+        z->l[j] = z->l[j + 1];
       y->filho[y->nchaves] = z->filho[0];
       for (j = 0; j < z->nchaves; j++)
         z->filho[j] = z->filho[j + 1];
@@ -239,12 +241,12 @@ TAB *remover(TAB *arv, int ch, int t)
       z = arv->filho[i - 1];
       int j;
       for (j = y->nchaves; j > 0; j--)
-        y->chave[j] = y->chave[j - 1];
+        y->l[j] = y->l[j - 1];
       for (j = y->nchaves + 1; j > 0; j--)
         y->filho[j] = y->filho[j - 1];
-      y->chave[0] = arv->chave[i - 1];
+      y->l[0] = arv->l[i - 1];
       y->nchaves++;
-      arv->chave[i - 1] = z->chave[z->nchaves - 1];
+      arv->l[i - 1] = z->l[z->nchaves - 1];
       y->filho[0] = z->filho[z->nchaves];
       z->nchaves--;
       arv->filho[i] = remover(y, ch, t);
@@ -255,12 +257,12 @@ TAB *remover(TAB *arv, int ch, int t)
       if (i < arv->nchaves && arv->filho[i + 1]->nchaves == t - 1)
       {
         z = arv->filho[i + 1];
-        y->chave[t - 1] = arv->chave[i];
+        y->l[t - 1] = arv->l[i];
         y->nchaves++;
         int j;
         for (j = 0; j < t - 1; j++)
         {
-          y->chave[t + j] = z->chave[j];
+          y->l[t + j] = z->l[j];
           y->nchaves++;
         }
         if (!y->folha)
@@ -272,7 +274,7 @@ TAB *remover(TAB *arv, int ch, int t)
         }
         for (j = i; j < arv->nchaves - 1; j++)
         {
-          arv->chave[j] = arv->chave[j + 1];
+          arv->l[j] = arv->l[j + 1];
           arv->filho[j + 1] = arv->filho[j + 2];
         }
         arv->nchaves--;
@@ -283,14 +285,14 @@ TAB *remover(TAB *arv, int ch, int t)
       {
         z = arv->filho[i - 1];
         if (i == arv->nchaves)
-          z->chave[t - 1] = arv->chave[i - 1];
+          z->l[t - 1] = arv->l[i - 1];
         else
-          z->chave[t - 1] = arv->chave[i];
+          z->l[t - 1] = arv->l[i];
         z->nchaves++;
         int j;
         for (j = 0; j < t - 1; j++)
         {
-          z->chave[t + j] = y->chave[j];
+          z->l[t + j] = y->l[j];
           z->nchaves++;
         }
         if (!z->folha)

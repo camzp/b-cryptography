@@ -1,7 +1,13 @@
+typedef struct letras
+{
+  char letra;
+  int classificacao;
+} Letras;
+
 typedef struct ArvB
 {
   int nchaves, folha, nivel;
-  char *chave;
+  Letras *l;
   struct ArvB **filho;
 } TAB;
 
@@ -14,14 +20,17 @@ TAB *Libera(TAB *a);
 //Imprime a árvore
 void Imprime(TAB *a, int andar);
 
-//Busca uma letra
-TAB *Busca(TAB *x, int ch);
+TAB *Busca(TAB *x, char ch);
 
-//Inicializa
 TAB *Inicializa();
 
 TAB *Divisao(TAB *x, int i, TAB *y, int t);
-TAB *Insere_Nao_Completo(TAB *x, int k, int t);
-TAB *Insere(TAB *T, int k, int t);
-TAB *remover(TAB *arv, int ch, int t);
+
+TAB *Insere_Nao_Completo(TAB *x, char k, int t);
+
+//Inserção de Letras
+TAB *Insere(TAB *T, char k, int t);
+
+TAB *remover(TAB *arv, char ch, int t);
+
 TAB *retira(TAB *arv, int k, int t);
