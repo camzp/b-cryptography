@@ -50,7 +50,7 @@ void Imprime(TAB *a, int andar)
       for (j = 0; j <= andar; j++)
         printf("   ");
       //printf("%d\n", a->chave[i]);
-      printf("%d\n", a->l[i].letra);
+      printf("%c\n", a->l[i].letra);
     }
     Imprime(a->filho[i], andar + 1);
   }
@@ -180,7 +180,7 @@ TAB *remover(TAB *arv, char ch, int t)
       TAB *y = arv->filho[i];
       while (!y->folha)
         y = y->filho[y->nchaves];
-      int temp = y->l[y->nchaves - 1].letra;
+      char temp = y->l[y->nchaves - 1].letra;
       arv->filho[i] = remover(arv->filho[i], temp, t);
       arv->l[i].letra = temp;
       return arv;
@@ -190,7 +190,7 @@ TAB *remover(TAB *arv, char ch, int t)
       TAB *y = arv->filho[i + 1];
       while (!y->folha)
         y = y->filho[0];
-      int temp = y->l[0].letra;
+      char temp = y->l[0].letra;
       y = remover(arv->filho[i + 1], temp, t);
       arv->l[i].letra = temp;
       return arv;
