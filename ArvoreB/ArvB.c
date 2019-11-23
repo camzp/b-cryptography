@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ArvB.h"
+#include "../letra.h"
 
 const int t = 2;
 
@@ -9,7 +10,7 @@ TAB *Cria(int t)
 {
   TAB *novo = (TAB *)malloc(sizeof(TAB));
   novo->nchaves = 0;
-  novo->l = (Letras *)malloc(sizeof(Letras) * ((t * 2) - 1));
+  novo->l = (Letra *)malloc(sizeof(Letra) * ((t * 2) - 1));
   novo->l->classificacao = 0;
   novo->folha = 1;
   novo->nivel = 0;
@@ -131,7 +132,7 @@ TAB *Insere_Nao_Completo(TAB *x, char k, int t)
   return x;
 }
 
-//Inserção de Letras
+//Inserção de Letra
 TAB *Insere(TAB *T, char k, int t)
 {
   if (Busca(T, k))

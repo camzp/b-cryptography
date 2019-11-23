@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ArvBplus.h"
+#include "../letra.h"
 
 const int t = 2;
 
@@ -9,7 +10,7 @@ TABM *Cria(int t)
 {
   TABM *novo = (TABM *)malloc(sizeof(TABM));
   novo->nchaves = 0;
-  novo->l = (Letras *)malloc(sizeof(Letras) * ((t * 2) - 1));
+  novo->l = (Letra *)malloc(sizeof(Letra) * ((t * 2) - 1));
   novo->l->classificacao = 0;
   novo->folha = 1;
   novo->nivel = 0;
@@ -137,7 +138,7 @@ TABM *insere_nao_completo(TABM *x, char mat, int t)
   return x;
 }
 
-//Inserção de Letras
+//Inserção de Letra
 TABM *insere(TABM *T, char mat, int t)
 {
   if (busca(T, mat))

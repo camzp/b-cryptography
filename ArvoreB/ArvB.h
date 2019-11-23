@@ -1,13 +1,12 @@
-typedef struct letras
-{
-  char letra;
-  int classificacao;
-} Letras;
+#include "../letra.h"
+
+#ifndef ARVB_H
+#define ARVB_H
 
 typedef struct ArvB
 {
   int nchaves, folha, nivel;
-  Letras *l;
+  Letra *l;
   struct ArvB **filho;
 } TAB;
 
@@ -34,3 +33,5 @@ TAB *Insere(TAB *T, char k, int t);
 TAB *remover(TAB *arv, char ch, int t);
 
 TAB *retira(TAB *arv, int k, int t);
+
+#endif
