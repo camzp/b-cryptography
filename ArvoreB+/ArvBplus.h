@@ -1,13 +1,12 @@
-typedef struct letras
-{
-  char letra;
-  int classificacao;
-} Letras;
+#include "../letra.h"
+
+#ifndef ARVBP_H
+#define ARVBP_H
 
 typedef struct ArvB
 {
   int nchaves, folha, nivel;
-  Letras *l;
+  Letra *l;
   struct ArvB **filho, *prox;
 } TABM;
 
@@ -30,3 +29,5 @@ TABM *insere_nao_completo(TABM *x, char mat, int t);
 
 //Inserção de Letras
 TABM *insere(TABM *T, char mat, int t);
+
+#endif
