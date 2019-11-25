@@ -33,8 +33,8 @@ TAB *removerB(TAB *arv, char ch, int t);
 
 TAB *retiraB(TAB *arv, char k, int t);
 
-void buscaClassificacao(TAB *a, char *nome, int andar);
+void buscaClassificacaoB(TAB *a, char *nome, int andar);
 
-void removeClassificacao(TAB *a, char *nome, int andar);
+void removeClassificacaoB(TAB *a, char *nome, int andar);
 
 #endif

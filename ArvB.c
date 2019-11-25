@@ -337,14 +337,14 @@ TAB *retiraB(TAB *arv, char k, int t)
   return removerB(arv, k, t);
 }
 
-void buscaClassificacao(TAB *a, char *nome, int andar)
+void buscaClassificacaoB(TAB *a, char *nome, int andar)
 {
   if (a)
   {
     int i;
     for (i = 0; i <= a->nchaves - 1; i++)
     {
-      buscaClassificacao(a->filho[i], nome, andar + 1);
+      buscaClassificacaoB(a->filho[i], nome, andar + 1);
       if (strcmp(nome, "vogal") == 0)
       {
         if (a->l[i].classificacao == 0)
@@ -364,23 +364,23 @@ void buscaClassificacao(TAB *a, char *nome, int andar)
         printf("string inválida\n");
       }
     }
-    buscaClassificacao(a->filho[i], nome, andar + 1);
+    buscaClassificacaoB(a->filho[i], nome, andar + 1);
   }
 }
 
-void removeClassificacao(TAB *a, char *nome, int andar)
+void removeClassificacaoB(TAB *a, char *nome, int andar)
 {
   if (a)
   {
     int i;
     for (i = 0; i <= a->nchaves - 1; i++)
     {
-      removeClassificacao(a->filho[i], nome, andar + 1);
+      removeClassificacaoB(a->filho[i], nome, andar + 1);
       if (strcmp(nome, "vogal") == 0)
       {
         if (a->l[i].classificacao == 0)
         {
-          a = retira(a, a->l[i].letra, t);
+          a = retiraB(a, a->l[i].letra, t);
         }
       }
       else if (strcmp(nome, "consoante") == 0)
@@ -388,7 +388,7 @@ void removeClassificacao(TAB *a, char *nome, int andar)
         printf("%c\n", a->l[i].letra);
         if (a->l[i].classificacao == 1)
         {
-          a = retira(a, a->l[i].letra, t);
+          a = retiraB(a, a->l[i].letra, t);
         }
       }
       else
@@ -396,6 +396,6 @@ void removeClassificacao(TAB *a, char *nome, int andar)
         printf("string inválida\n");
       }
     }
-    removeClassificacao(a->filho[i], nome, andar + 1);
+    removeClassificacaoB(a->filho[i], nome, andar + 1);
   }
 }

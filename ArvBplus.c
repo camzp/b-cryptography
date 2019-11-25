@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ArvBplus.h"
-
+#include <string.h>
+#include <ctype.h>
+#include "frase.h"
 
 //Cria uma nova página
 TABM *Cria(int t)
@@ -160,4 +162,35 @@ TABM *insere(TABM *T, char mat, int t)
   }
   T = insere_nao_completo(T, mat, t);
   return T;
+}
+
+void buscaClassificacao(TABM *a, char *nome, int andar)
+{
+  if (a)
+  {
+    int i;
+    for (i = 0; i <= a->nchaves - 1; i++)
+    {
+      buscaClassificacao(a->filho[i], nome, andar + 1);
+      if (strcmp(nome, "vogal") == 0)
+      {
+        if ((a->l[i].classificacao == 0) && (a->folha == 1))
+        {
+          printf("%c ", a->l[i].letra);
+        }
+      }
+      else if (strcmp(nome, "consoante") == 0)
+      {
+        if ((a->l[i].classificacao == 1) && (a->folha == 1))
+        {
+          printf("%c ", a->l[i].letra);
+        }
+      }
+      else
+      {
+        printf("string inválida\n");
+      }
+    }
+    buscaClassificacao(a->filho[i], nome, andar + 1);
+  }
 }
