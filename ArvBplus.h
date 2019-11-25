@@ -3,7 +3,8 @@
 #ifndef ARVBP_H
 #define ARVBP_H
 
-typedef struct ArvBP{
+typedef struct ArvBP
+{
   int nchaves, folha, nivel;
   Letra *l;
   struct ArvBP **filho, *prox;
@@ -28,5 +29,7 @@ TABM *insere_nao_completo(TABM *x, char mat, int t);
 
 //Inserção de Letras
 TABM *insere(TABM *T, char mat, int t);
+
+void buscaClassificacao(TABM *a, char *nome, int andar);
 
 #endif
