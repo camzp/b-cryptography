@@ -116,6 +116,14 @@ TAB *Insere_Nao_CompletoB(TAB *x, char k, int t)
       i--;
     }
     x->l[i + 1].letra = k;
+    if (k == 'a' || k == 'e' || k == 'i' || k == 'o' || k == 'u')
+    {
+      x->l[i + 1].classificacao = 0;
+    }
+    else
+    {
+      x->l[i + 1].classificacao = 1;
+    }
     x->nchaves++;
     return x;
   }
@@ -124,37 +132,45 @@ TAB *Insere_Nao_CompletoB(TAB *x, char k, int t)
   i++;
   if (x->filho[i]->nchaves == ((2 * t) - 1))
   {
-    x = DivisaoB(x, (i + 1), x->filho[i], t);
+    x = Divisao(x, (i + 1), x->filho[i], t);
     if (k != x->l[i].letra)
       i++;
   }
-  x->filho[i] = Insere_Nao_CompletoB(x->filho[i], k, t);
+  x->filho[i] = Insere_Nao_Completo(x->filho[i], k, t);
   return x;
 }
 
 //Inserção de Letra
 TAB *InsereB(TAB *T, char k, int t)
 {
-  if (BuscaB(T, k))
+  if (Busca(T, k))
     return T;
   if (!T)
   {
-    T = CriaB(t);
+    T = Cria(t);
     T->l[0].letra = k;
+    if (k == 'a' || k == 'e' || k == 'i' || k == 'o' || k == 'u')
+    {
+      T->l[0].classificacao = 0;
+    }
+    else
+    {
+      T->l[0].classificacao = 1;
+    }
     T->nchaves = 1;
     return T;
   }
   if (T->nchaves == (2 * t) - 1)
   {
-    TAB *S = CriaB(t);
+    TAB *S = Cria(t);
     S->nchaves = 0;
     S->folha = 0;
     S->filho[0] = T;
-    S = DivisaoB(S, 1, T, t);
-    S = Insere_Nao_CompletoB(S, k, t);
+    S = Divisao(S, 1, T, t);
+    S = Insere_Nao_Completo(S, k, t);
     return S;
   }
-  T = Insere_Nao_CompletoB(T, k, t);
+  T = Insere_Nao_Completo(T, k, t);
   return T;
 }
 
