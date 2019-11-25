@@ -132,22 +132,22 @@ TAB *Insere_Nao_CompletoB(TAB *x, char k, int t)
   i++;
   if (x->filho[i]->nchaves == ((2 * t) - 1))
   {
-    x = Divisao(x, (i + 1), x->filho[i], t);
+    x = DivisaoB(x, (i + 1), x->filho[i], t);
     if (k != x->l[i].letra)
       i++;
   }
-  x->filho[i] = Insere_Nao_Completo(x->filho[i], k, t);
+  x->filho[i] = Insere_Nao_CompletoB(x->filho[i], k, t);
   return x;
 }
 
 //Inserção de Letra
 TAB *InsereB(TAB *T, char k, int t)
 {
-  if (Busca(T, k))
+  if (BuscaB(T, k))
     return T;
   if (!T)
   {
-    T = Cria(t);
+    T = CriaB(t);
     T->l[0].letra = k;
     if (k == 'a' || k == 'e' || k == 'i' || k == 'o' || k == 'u')
     {
@@ -166,11 +166,11 @@ TAB *InsereB(TAB *T, char k, int t)
     S->nchaves = 0;
     S->folha = 0;
     S->filho[0] = T;
-    S = Divisao(S, 1, T, t);
-    S = Insere_Nao_Completo(S, k, t);
+    S = DivisaoB(S, 1, T, t);
+    S = Insere_Nao_CompletoB(S, k, t);
     return S;
   }
-  T = Insere_Nao_Completo(T, k, t);
+  T = Insere_Nao_CompletoB(T, k, t);
   return T;
 }
 
