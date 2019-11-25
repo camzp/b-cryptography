@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "ArvB.h"
-
+#include "frase.h"
 
 //Cria uma nova página
 TAB *CriaB(int t)
@@ -312,9 +314,72 @@ TAB *removerB(TAB *arv, char ch, int t)
   return arv;
 }
 
-TAB *retiraB(TAB *arv, int k, int t)
+TAB *retiraB(TAB *arv, char k, int t)
 {
   if (!arv || !BuscaB(arv, k))
     return arv;
   return removerB(arv, k, t);
+}
+
+void buscaClassificacao(TAB *a, char *nome, int andar)
+{
+  if (a)
+  {
+    int i;
+    for (i = 0; i <= a->nchaves - 1; i++)
+    {
+      buscaClassificacao(a->filho[i], nome, andar + 1);
+      if (strcmp(nome, "vogal") == 0)
+      {
+        if (a->l[i].classificacao == 0)
+        {
+          printf("%c ", a->l[i].letra);
+        }
+      }
+      else if (strcmp(nome, "consoante") == 0)
+      {
+        if (a->l[i].classificacao == 1)
+        {
+          printf("%c ", a->l[i].letra);
+        }
+      }
+      else
+      {
+        printf("string inválida\n");
+      }
+    }
+    buscaClassificacao(a->filho[i], nome, andar + 1);
+  }
+}
+
+void removeClassificacao(TAB *a, char *nome, int andar)
+{
+  if (a)
+  {
+    int i;
+    for (i = 0; i <= a->nchaves - 1; i++)
+    {
+      removeClassificacao(a->filho[i], nome, andar + 1);
+      if (strcmp(nome, "vogal") == 0)
+      {
+        if (a->l[i].classificacao == 0)
+        {
+          a = retira(a, a->l[i].letra, t);
+        }
+      }
+      else if (strcmp(nome, "consoante") == 0)
+      {
+        printf("%c\n", a->l[i].letra);
+        if (a->l[i].classificacao == 1)
+        {
+          a = retira(a, a->l[i].letra, t);
+        }
+      }
+      else
+      {
+        printf("string inválida\n");
+      }
+    }
+    removeClassificacao(a->filho[i], nome, andar + 1);
+  }
 }
