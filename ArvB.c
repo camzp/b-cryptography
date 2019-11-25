@@ -162,7 +162,7 @@ TAB *InsereB(TAB *T, char k, int t)
   }
   if (T->nchaves == (2 * t) - 1)
   {
-    TAB *S = Cria(t);
+    TAB *S = CriaB(t);
     S->nchaves = 0;
     S->folha = 0;
     S->filho[0] = T;
