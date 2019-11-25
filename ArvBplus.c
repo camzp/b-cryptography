@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ArvBplus.h"
-#include "../letra.h"
 
-const int t = 2;
 
 //Cria uma nova página
 TABM *Cria(int t)

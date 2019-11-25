@@ -3,6 +3,9 @@
     "stdio.h": "c",
     "letras.h": "c",
     "frase.h": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "arvb.h": "c",
+    "arvbplus.h": "c",
+    "stdlib.h": "c"
   }
 }

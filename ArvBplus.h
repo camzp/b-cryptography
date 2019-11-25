@@ -1,13 +1,12 @@
-#include "../letra.h"
+#include "frase.h"
 
 #ifndef ARVBP_H
 #define ARVBP_H
 
-typedef struct ArvB
-{
+typedef struct ArvBP{
   int nchaves, folha, nivel;
   Letra *l;
-  struct ArvB **filho, *prox;
+  struct ArvBP **filho, *prox;
 } TABM;
 
 //Cria uma nova página

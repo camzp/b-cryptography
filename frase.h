@@ -1,24 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include "string.h"
-#include "letra.h"
 
+
+#ifndef FRASE_H
+#define FRASE_H
+
+
+typedef struct letra {
+  char letra;
+  int classificacao; //0: VOGAL, 1: CONSOANTE
+  struct letra *prox;
+} Letra;
+
+typedef Letra* Lista;
 
 typedef struct frase {
    Lista letras;
-   int posicao;
    int tamanho;
 } Frase;
 
-Frase iniciaFrase(int tamanho);
+Lista initLista ();
 
-void editaTamanhoFrase(int tamanho);
+int itsNull (Lista l);
+
+void insereFim(char l, int c, Lista *li);
+
+void imprimeLista (Lista l);
+
+void leFrase (Frase *f);
+
+Lista retornaLetra (Frase *f);
+
+
+Lista prox (Lista l);
+
+void removeLetra (Lista *l);
+
+Frase iniciaFrase (int tamanho);
 
 void toUpper(char *f);
 
-void leFrase(Frase *f);
-
-void terminaFrase(Frase *f);
-
-Letra retornaProx(Frase *f);
+#endif
