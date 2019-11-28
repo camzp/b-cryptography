@@ -24,7 +24,7 @@ Lista initLista ();
 
 int itsNull (Lista l);
 
-void insereFim(char l, int c, Lista *li);
+void insereFim(char l, Lista *li);
 
 void imprimeLista (Lista l);
 

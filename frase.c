@@ -13,12 +13,11 @@ int itsNull (Lista l){
 	return (l == NULL);
 }
 
-void insereFim(char l, int c, Lista *li) {
+void insereFim(char l, Lista *li) {
 	
 	Letra *le;
 	le = (Letra*) malloc (sizeof(Letra));
 	le->letra = l ;
-	le->classificacao = c;
 	le->prox = NULL;
 
 	if (itsNull (*li)){
@@ -36,7 +35,7 @@ void insereFim(char l, int c, Lista *li) {
 void imprimeLista (Lista l){
   Lista aux = l;
   while (aux != NULL){
-    printf("%c\n", aux->letra);
+    printf(" %c\n", aux->letra);
     aux = aux -> prox;
   }  
 }
@@ -50,15 +49,9 @@ void leFrase (Frase *f){
 		toUpper(texto);
 
 		for (int i=0; i < strlen(texto); ++i){
-			if (texto[i] == 'A' || texto[i] == 'E' || texto[i] == 'I' 
-						|| texto[i] == 'O'|| texto[i] == 'U'){
-							insereFim(texto[i], 0, &f->letras);
-							}
-			else {
-				insereFim(texto[i], 1, &f->letras);
-			}
+				if (texto[i] != ' ' || texto[i] != '%') insereFim(texto[i], &f->letras);
 		}
-		// imprimeLista(f->letras); //debug
+		imprimeLista(f->letras); //debug
 }
 
 void removeLetra (Lista *l){

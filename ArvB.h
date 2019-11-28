@@ -33,8 +33,12 @@ TAB *removerB(TAB *arv, char ch, int t);
 
 TAB *retiraB(TAB *arv, char k, int t);
 
+int retornaNivel(TAB *a, char chave, int andar);
+
+int retornaPagina(TAB *a, char chave);
+
 void buscaClassificacaoB(TAB *a, char *nome, int andar);
 
 void removeClassificacaoB(TAB *a, char *nome, int andar);
-
+  
 #endif

@@ -3,34 +3,28 @@
 #include <string.h>
 #include <ctype.h>
 #include "ArvB.h"
-#include "frase.h"
+
+const int t = 2;
 
 //Cria uma nova página
-TAB *CriaB(int t)
-{
+TAB *CriaB(int t){
   TAB *novo = (TAB *)malloc(sizeof(TAB));
   novo->nchaves = 0;
   novo->l = (Letra *)malloc(sizeof(Letra) * ((t * 2) - 1));
   novo->l->classificacao = 0;
   novo->folha = 1;
-  novo->nivel = 0;
   novo->filho = (TAB **)malloc(sizeof(TAB *) * (t * 2));
   int i;
-  for (i = 0; i < (t * 2); i++)
-    novo->filho[i] = NULL;
+  for (i = 0; i < (t * 2); i++) novo->filho[i] = NULL;
   return novo;
 }
 
 //Libera a página
-TAB *LiberaB(TAB *a)
-{
-  if (a)
-  {
-    if (a->folha == 0)
-    {
+TAB *LiberaB(TAB *a){
+  if (a) {
+    if (a->folha == 0){
       int i;
-      for (i = 0; i < a->nchaves; i++)
-        LiberaB(a->filho[i]);
+      for (i = 0; i < a->nchaves; i++) LiberaB(a->filho[i]);
     }
     free(a->l);
     free(a->filho);
@@ -40,18 +34,14 @@ TAB *LiberaB(TAB *a)
 }
 
 //Imprime a árvore
-void ImprimeB(TAB *a, int andar)
-{
-  if (a)
-  {
+void ImprimeB(TAB *a, int andar){
+  if (a){
     int i, j;
-    for (i = 0; i <= a->nchaves - 1; i++)
-    {
+    for (i = 0; i <= a->nchaves - 1; i++) {
       ImprimeB(a->filho[i], andar + 1);
-      for (j = 0; j <= andar; j++)
-        printf("   ");
+      for (j = 0; j <= andar; j++) printf("   ");
       //printf("%d\n", a->chave[i]);
-      printf("%c\n", a->l[i].letra);
+      printf("%c - (%d)\n", a->l[i].letra, a->l[i].classificacao);
     }
     ImprimeB(a->filho[i], andar + 1);
   }
@@ -60,16 +50,11 @@ void ImprimeB(TAB *a, int andar)
 TAB *BuscaB(TAB *x, char ch)
 {
   TAB *resp = NULL;
-  if (!x)
-    return resp;
-
+  if (!x) return resp;
   int i = 0;
-  while ((i < x->nchaves) && (ch != x->l[i].letra))
-    i++;
-  if ((i < x->nchaves) && (ch == x->l[i].letra))
-    return x;
-  if (x->folha == 1)
-    return resp;
+  while (i < x->nchaves && ch > x->l[i].letra) i++;
+  if (i < x->nchaves && ch == x->l[i].letra) return x;
+  if (x->folha) return resp;
   return BuscaB(x->filho[i], ch);
 }
 
@@ -78,90 +63,70 @@ TAB *InicializaB()
   return NULL;
 }
 
-TAB *DivisaoB(TAB *x, int i, TAB *y, int t)
-{
+TAB *DivisaoB(TAB *x, int i, TAB *y, int t){
   TAB *z = CriaB(t);
   z->nchaves = t - 1;
   z->folha = y->folha;
   int j;
-  for (j = 0; j < t - 1; j++)
-    z->l[j] = y->l[j + t];
-  if (!y->folha)
-  {
-    for (j = 0; j < t; j++)
-    {
+  for (j = 0; j < t - 1; j++) z->l[j] = y->l[j + t];
+  if (!y->folha){
+    for (j = 0; j < t; j++){
       z->filho[j] = y->filho[j + t];
       y->filho[j + t] = NULL;
     }
   }
   y->nchaves = t - 1;
-  for (j = x->nchaves; j >= i; j--)
-    x->filho[j + 1] = x->filho[j];
+  for (j = x->nchaves; j >= i; j--) x->filho[j + 1] = x->filho[j];
   x->filho[i] = z;
-  for (j = x->nchaves; j >= i; j--)
-    x->l[j] = x->l[j - 1];
+  for (j = x->nchaves; j >= i; j--) x->l[j] = x->l[j - 1];
   x->l[i - 1] = y->l[t - 1];
   x->nchaves++;
   return x;
 }
 
-TAB *Insere_Nao_CompletoB(TAB *x, char k, int t)
-{
+TAB *Insere_Nao_CompletoB(TAB *x, char k, int t){
   int i = x->nchaves - 1;
-  if (x->folha)
-  {
-    while ((i >= 0) && (k != x->l[i].letra))
-    {
+
+  if (x->folha){
+    while ((i >= 0) && (k < x->l[i].letra)){
       x->l[i + 1] = x->l[i];
       i--;
     }
     x->l[i + 1].letra = k;
-    if (k == 'a' || k == 'e' || k == 'i' || k == 'o' || k == 'u')
-    {
-      x->l[i + 1].classificacao = 0;
-    }
-    else
-    {
-      x->l[i + 1].classificacao = 1;
-    }
+    
+    if (k == 'A' || k == 'E' || k == 'I' || k == 'O' || k == 'U') x->l[i + 1].classificacao = 0;
+    else x->l[i + 1].classificacao = 1;
+    
     x->nchaves++;
     return x;
   }
-  while ((i >= 0) && (k != x->l[i].letra))
-    i--;
+
+  while ((i >= 0) && (k < x->l[i].letra)) i--;
+
   i++;
-  if (x->filho[i]->nchaves == ((2 * t) - 1))
-  {
+  
+  if (x->filho[i]->nchaves == ((2 * t) - 1)){
     x = DivisaoB(x, (i + 1), x->filho[i], t);
-    if (k != x->l[i].letra)
-      i++;
+    if (k > x->l[i].letra) i++;
   }
   x->filho[i] = Insere_Nao_CompletoB(x->filho[i], k, t);
   return x;
 }
 
 //Inserção de Letra
-TAB *InsereB(TAB *T, char k, int t)
-{
-  if (BuscaB(T, k))
-    return T;
-  if (!T)
-  {
+TAB *InsereB(TAB *T, char k, int t){
+  if (BuscaB(T, k)) return T;
+  
+  if (!T){
     T = CriaB(t);
     T->l[0].letra = k;
-    if (k == 'a' || k == 'e' || k == 'i' || k == 'o' || k == 'u')
-    {
-      T->l[0].classificacao = 0;
-    }
-    else
-    {
-      T->l[0].classificacao = 1;
-    }
+    if (k == 'A' || k == 'E' || k == 'I' || k == 'O' || k == 'U') T->l[0].classificacao = 0;
+    else T->l[0].classificacao = 1;
     T->nchaves = 1;
     return T;
   }
-  if (T->nchaves == (2 * t) - 1)
-  {
+
+  if (T->nchaves == (2 * t) - 1){
     TAB *S = CriaB(t);
     S->nchaves = 0;
     S->folha = 0;
@@ -176,27 +141,21 @@ TAB *InsereB(TAB *T, char k, int t)
 
 TAB *removerB(TAB *arv, char ch, int t)
 {
-  if (!arv)
-    return arv;
+  if (!arv) return arv;
   int i;
-
-  for (i = 0; i < arv->nchaves && arv->l[i].letra != ch; i++)
-    ;
-  if (i < arv->nchaves && ch == arv->l[i].letra)
-  { //CASOS 1, 2A, 2B e 2C
-    if (arv->folha)
-    { //CASO 1
+  for (i = 0; i < arv->nchaves && arv->l[i].letra < ch; i++);
+  if (i < arv->nchaves && ch == arv->l[i].letra){ //CASOS 1, 2A, 2B e 2C
+    if (arv->folha){ //CASO 1
       int j;
-      for (j = i; j < arv->nchaves - 1; j++)
-        arv->l[j] = arv->l[j + 1];
+      for (j = i; j < arv->nchaves - 1; j++) arv->l[j] = arv->l[j + 1];
       arv->nchaves--;
       return arv;
     }
+
     if (!arv->folha && arv->filho[i]->nchaves >= t)
     { //CASO 2A
       TAB *y = arv->filho[i];
-      while (!y->folha)
-        y = y->filho[y->nchaves];
+      while (!y->folha) y = y->filho[y->nchaves];
       char temp = y->l[y->nchaves - 1].letra;
       arv->filho[i] = removerB(arv->filho[i], temp, t);
       arv->l[i].letra = temp;
@@ -330,10 +289,8 @@ TAB *removerB(TAB *arv, char ch, int t)
   return arv;
 }
 
-TAB *retiraB(TAB *arv, char k, int t)
-{
-  if (!arv || !BuscaB(arv, k))
-    return arv;
+TAB *retiraB(TAB *arv, char k, int t){
+  if (!arv || !BuscaB(arv, k)) return arv;
   return removerB(arv, k, t);
 }
 
@@ -349,6 +306,7 @@ void buscaClassificacaoB(TAB *a, char *nome, int andar)
       {
         if (a->l[i].classificacao == 0)
         {
+          
           printf("%c ", a->l[i].letra);
         }
       }
@@ -397,5 +355,25 @@ void removeClassificacaoB(TAB *a, char *nome, int andar)
       }
     }
     removeClassificacaoB(a->filho[i], nome, andar + 1);
+  }
+}
+
+int retornaNivel(TAB *a, char chave, int andar){
+  TAB* percorre = a;
+  if(percorre){
+    int i = 0;
+    while(i < percorre->nchaves && chave > percorre->l[i].letra) ++i;
+    if (i < percorre->nchaves && chave == percorre->l[i].letra) return andar;
+    return retornaNivel(percorre->filho[i], chave, andar+1);
+  }
+}
+
+int retornaPagina(TAB *a, char chave){
+  TAB* percorre = a;
+  if(percorre){
+    int i = 0;
+    while(i < percorre->nchaves && chave > percorre->l[i].letra) ++i;
+    if (i < percorre->nchaves && chave == percorre->l[i].letra) return i;
+    return retornaPagina(percorre->filho[i], chave);
   }
 }

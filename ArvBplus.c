@@ -13,7 +13,7 @@ TABM *Cria(int t)
   novo->l = (Letra *)malloc(sizeof(Letra) * ((t * 2) - 1));
   novo->l->classificacao = 0;
   novo->folha = 1;
-  novo->nivel = 0;
+
   novo->prox = NULL;
   novo->filho = (TABM **)malloc(sizeof(TABM *) * (t * 2));
   int i;
@@ -141,12 +141,13 @@ TABM *insere_nao_completo(TABM *x, char mat, int t)
 //Inserção de Letra
 TABM *insere(TABM *T, char mat, int t)
 {
-  if (busca(T, mat))
-    return T;
+  if (busca(T, mat)) return T;
   if (!T)
   {
     T = Cria(t);
     T->l[0].letra = mat;
+    if (mat == 'A' || mat == 'E' || mat == 'I' || mat == 'O' || mat == 'U') T->l[0].classificacao = 0;
+    else T->l[0].classificacao = 1;
     T->nchaves = 1;
     return T;
   }
@@ -155,6 +156,7 @@ TABM *insere(TABM *T, char mat, int t)
     TABM *S = Cria(t);
     S->nchaves = 0;
     S->folha = 0;
+    
     S->filho[0] = T;
     S = divisao(S, 1, T, t);
     S = insere_nao_completo(S, mat, t);
